@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js" integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>hello my name is aman</h1>
+    <input type="text" name="" id="text">
+    <button id="btn">send</button>
+    <script>
+        var socket=io()
+        var btn=document.getElementById("btn");
+        var text=document.getElementById("text");
+         btn.addEventListener("click",function(){
+            socket.emit("message",text.value)
+            text.value=""
+         })
+         socket.on("allmsg",function(data){
+            var h1 = document.createElement('h1');
+            h1.appendChild(document.createTextNode(data));
+            document.body.appendChild(h1);
+         })
+    </script>
+</body>
+</html>
