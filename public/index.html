@@ -5,24 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js" integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>hello my name is aman</h1>
-    <input type="text" name="" id="text">
-    <button id="btn">send</button>
+    <h1 id="welcome">Welcome Dear</h1>
+  <div>
+    <div id="topdiv">
+        <div class="chat-container" id="maibox"></div>
+    </div>
+    
+  <div style=" justify-content: center; display: flex; width: 100%;">
+    <div style=" width: 90%"><input type="text" name="" id="text" placeholder="Enter Your Message" >
+        <button id="btn">send</button></div>
+  </div>
+  </div>
     <script>
+        function scrollChat() {
+  var chatContainer = document.querySelector('.chat-container');
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        const div=document.getElementById('maibox')
+
+let namesave = '';
+      var myname=  localStorage.getItem('name')
+      if(myname){
+        namesave=myname;
+      }
+ 
+while(namesave === ''||namesave === null) {
+    namesave = prompt('Enter your name');
+}
+
+localStorage.setItem('name', namesave);
+const  welcome=document.getElementById("welcome");
+if(localStorage.getItem('name')){
+    welcome.innerHTML+=" "+localStorage.getItem('name')
+}else{
+    welcome.innerHTML+=" "+namesave
+}
+
         var socket=io()
-        var btn=document.getElementById("btn");
-        var text=document.getElementById("text");
-         btn.addEventListener("click",function(){
-            socket.emit("message",text.value)
-            text.value=""
-         })
+        socket.emit('sendname',localStorage.getItem('name'));
+        socket.on('fistAllMsgsend',(data)=> {
+            data.forEach(element => {
+    var msg =   "You : " + element.msg;
+    var msg2 =element.msg + " : " + element.name  ;
+    var h1 = document.createElement('h1');
+    var divinner = document.createElement('div');
+    var divinner1 = document.createElement('div');
+    var divinner2 = document.createElement('div');
+    
+    if (element.name === localStorage.getItem('name')) {
+        h1.appendChild(document.createTextNode(msg));
+        divinner2.appendChild(h1)
+        divinner.appendChild(divinner2)
+        divinner.style.display = 'flex'
+        divinner2.style.width = '40%'
+        divinner2.style.background = '#FFF'
+        divinner2.style.paddingLeft = '24px'
+        divinner2.style.borderRadius = '10px'
+        divinner.style. marginTop='5px'
+        divinner.style. marginBottom='5px'
+        divinner.style.justifyContent='left'
+        h1.style.textAlign = 'left';
+        h1.style.color = 'black';
+    } else {
+        h1.appendChild(document.createTextNode(msg2));
+        divinner1.appendChild(h1)
+        divinner.appendChild(divinner1)
+        divinner.style.display = 'flex'
+        divinner1.style.borderRadius = '10px'
+        divinner1.style.width = '40%'
+        divinner1.style.paddingRight = '24px'
+
+        divinner1.style.background = '#94e99e'
+        divinner.style.justifyContent='right'
+        divinner.style. marginTop='5px'
+        divinner.style. marginBottom='5px'
+        h1.style.textAlign = 'right';
+        h1.style.color = 'black';
+        
+    }
+    
+    div.appendChild(divinner);
+    scrollChat()
+})
+         
+            console.log(data)
+        })
+        var btn = document.getElementById("btn");
+var text = document.getElementById("text");
+
+btn.addEventListener("click", function() {
+   if(text.value == ""){
+    alert("Please Enter Your Message")
+   }else{
+    socket.emit("message", { name: localStorage.getItem('name'), msg: text.value });
+    var divinner = document.createElement('div');
+    var divinner2 = document.createElement('div');
+    var msg =   "You : " + text.value;
+    var h1 = document.createElement('h1');
+    
+   
+   
+
+
+
+
+
+    h1.appendChild(document.createTextNode(msg));
+    divinner2.appendChild(h1)
+    
+    divinner.appendChild(divinner2)
+        
+        divinner.style.display = 'flex'
+        divinner2.style.width = '40%'
+        divinner2.style.background = '#FFF'
+        divinner2.style.paddingLeft = '24px'
+        divinner2.style.borderRadius = '10px'
+        divinner.style. marginTop='5px'
+        divinner.style. marginBottom='5px'
+        divinner.style.justifyContent='left'
+        h1.style.textAlign = 'left';
+        h1.style.color = 'black';
+
+
+
+
+
+
+
+
+    div.appendChild(divinner); // Append the created h1 element to the document body
+    scrollChat()
+    text.value = "";
+   }
+});
+         
+text.addEventListener("keypress", function (e) {
+   if(text.value==''){
+    alert("Please Enter Your Message")
+   }else{
+    if (e.key === "Enter") {
+        socket.emit("message", { name: localStorage.getItem('name'), msg: text.value });
+        var msg =   "You : " + text.value;
+        var divinner = document.createElement('div');
+    var divinner2 = document.createElement('div');
+    var h1 = document.createElement('h1');
+
+       
+    
+    
+    h1.appendChild(document.createTextNode(msg));
+
+    divinner2.appendChild(h1)
+    
+    divinner.appendChild(divinner2)
+        
+        divinner.style.display = 'flex'
+        divinner2.style.width = '40%'
+        divinner2.style.background = '#FFF'
+        divinner2.style.paddingLeft = '24px'
+        divinner2.style.borderRadius = '10px'
+        divinner.style. marginTop='5px'
+        divinner.style. marginBottom='5px'
+        divinner.style.justifyContent='left'
+        h1.style.textAlign = 'left';
+        h1.style.color = 'black';
+
+
+
+    div.appendChild(divinner); // Append the created h1 element to the document body
+    scrollChat()
+    text.value = "";
+    }
+   }
+});
+
          socket.on("allmsg",function(data){
+            var msg=data.name+" : "+data.msg
+            var divinner = document.createElement('div');
+    var divinner1 = document.createElement('div');
             var h1 = document.createElement('h1');
-            h1.appendChild(document.createTextNode(data));
-            document.body.appendChild(h1);
+            h1.style.textAlign = 'right';
+           
+            h1.appendChild(document.createTextNode(msg));
+
+            divinner1.appendChild(h1)
+        divinner.appendChild(divinner1)
+        divinner.style.display = 'flex'
+        divinner1.style.borderRadius = '10px'
+        divinner1.style.width = '40%'
+        divinner1.style.paddingRight = '24px'
+
+        divinner1.style.background = '#94e99e'
+        divinner.style.justifyContent='right'
+        divinner.style. marginTop='5px'
+        divinner.style. marginBottom='5px'
+        h1.style.textAlign = 'right';
+        h1.style.color = 'black';
+
+            div.appendChild(divinner);
+            scrollChat()
          })
+         
+         
     </script>
 </body>
 </html>

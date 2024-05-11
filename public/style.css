@@ -1,0 +1,46 @@
+body{
+background: rgb(158, 158, 233);
+}
+#maibox{
+    width: 90%;
+    height: 75vh;
+    background-color: #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    overflow: scroll;
+}
+#maibox::-webkit-scrollbar{
+    display: none;
+}
+#topdiv{
+    display: flex;
+    justify-content: center;
+}
+#welcome{
+    text-align: center;
+}
+#text{
+    margin-top: 5px;
+    width: 90%;
+    height: 5vh;
+    font-size: 20px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    outline: none;
+}
+#btn{
+    margin-top: 5px;
+    width:9%;
+    height: 5vh;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: rgb(58, 58, 232);
+    color: #fff;
+    font-size: 20px;
+    
+}
+@media screen and (max-width: 650px) {
+    h1 {
+      font-size: 13px;
+    }
+  }
