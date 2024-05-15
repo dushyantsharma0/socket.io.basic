@@ -7,8 +7,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js" integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <link rel="stylesheet" href="./style.css">
 </head>
-<body>
-    <h1 id="welcome">Welcome Dear</h1>
+<body  >
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <h1 id="welcome">Chat With</h1>
+    <img  src="" id="chatimg" alt="">
+    </div>
+    <div id="maiboximg"  >
+        <img style="top: 50%; z-index: -200; border-radius: 10px; margin-left: 50%; transform: translate(-50%,-50%); position: absolute;" id="bigimg" src="" alt="">
+
+    </div>
   <div>
     <div id="topdiv">
         <div class="chat-container" id="maibox"></div>
@@ -19,7 +26,158 @@
         <button id="btn">send</button></div>
   </div>
   </div>
-    <script>
+  <script>
+  
+
+
+
+
+  
+  var maiboximg =document.getElementById("maiboximg");
+
+  maiboximg.onclick=function(){
+                    maiboximg.style.display='none'
+                bigimg.src='';
+                bigimg.style.zIndex=-200
+                }
+
+function scrollChat() {
+
+    
+
+  var chatContainer = document.querySelector('.chat-container');
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+
+    var text=document.getElementById("text");
+ 
+ 
+    fetch('http://localhost:3000/getchat',{
+        method:'GET',
+        headers:{
+            'Content-Type':'application/json',
+            'sender_id':localStorage.getItem('sender_id'),
+            'reciver_id':localStorage.getItem('reciver_id')
+        }
+    }).then((resp)=> resp.json()).then((data)=>{
+        console.log(data);
+        var welcome=document.getElementById("welcome");
+        var chatimg=document.getElementById("chatimg");
+        if(data[0].Reciver_Id.name==localStorage.getItem('name')){
+            welcome.innerHTML+=" "+data[0].Sender_Id.name;
+            chatimg.src=data[0].Sender_Id.image;
+            chatimg.onclick=function(){
+                var bigimg =document.getElementById("bigimg");
+                bigimg.src=data[0].Sender_Id.image;
+                bigimg.style.zIndex=+200
+                maiboximg.style.display="block"
+            }
+        }else{
+            welcome.innerHTML+=" "+data[0].Reciver_Id.name;
+            chatimg.src=data[0].Reciver_Id.image;
+            chatimg.onclick=function(){
+                var bigimg =document.getElementById("bigimg");
+                bigimg.src=data[0].Reciver_Id.image;
+                bigimg.style.zIndex=+200
+                maiboximg.style.display="block"
+            }
+            
+        }
+
+    
+        data.forEach(element => {
+            var divinner = document.createElement('div');
+            divinner.style.display='flex'
+           
+            
+            
+            var divinner2 = document.createElement('div');
+            
+            var h1 = document.createElement('h1');
+            
+           
+            h1.style.padding='10px';
+            h1.style.color='black';
+            h1.style.borderRadius='10px';
+            h1.style.width='40%';
+            if(localStorage.getItem('sender_id')==element.Sender_Id._id){
+                h1.style.background='#fff'
+               
+                // var msg =  " : " +element.msg ;
+                h1.innerHTML=element.msg
+                divinner.style.textAlign = 'left';
+            }else{
+                h1.style.background='#94e99e'
+                // var msg =  element.msg  + " : " +element.Sender_Id.name ;
+                h1.innerHTML=element.msg   
+                divinner.style.justifyContent='right'
+
+                divinner.style.textAlign = 'right';
+                   
+            }
+            // h1.appendChild(document.createTextNode(msg));
+            divinner.appendChild(h1);
+            
+            divinner2.appendChild(divinner);
+            document.getElementById('maibox').appendChild(divinner2);
+            text.value='';
+            scrollChat();
+        });
+    });
+     
+ 
+ 
+
+  
+    var socket=io()
+ 
+  
+
+
+
+ socket.on('otherUserDisplay',(data)=>{
+     if(localStorage.getItem('sender_id')==data.reciver_id&&localStorage.getItem('reciver_id')==data.sender_id){
+         var divinner = document.createElement('div');
+         var divinner2 = document.createElement('div');
+         var msg =  data.message  + " : " +data.name ;
+         var h1 = document.createElement('h1');
+         h1.style.textAlign = 'right';
+         h1.appendChild(document.createTextNode(msg));
+         divinner.appendChild(h1);
+         divinner2.appendChild(divinner);
+         document.getElementById('maibox').appendChild(divinner2);
+         text.value='';
+         scrollChat();
+
+     }
+ })
+
+    var btn=document.getElementById("btn");
+  btn.onclick=()=>{
+   if(text.value!=''){
+    socket.emit('chat',{name:localStorage.getItem('name'),sender_id:localStorage.getItem('sender_id'),reciver_id:localStorage.getItem('reciver_id'),message:text.value}); 
+     var divinner = document.createElement('div');
+    var divinner2 = document.createElement('div');
+    var msg =   "You : " + text.value;
+    var h1 = document.createElement('h1');
+     
+    h1.appendChild(document.createTextNode(msg));
+    divinner.appendChild(h1);
+    divinner2.appendChild(divinner);
+    document.getElementById('maibox').appendChild(divinner2);
+    text.value='';
+    scrollChat();
+   }else{
+    alert("Please Enter Your Message")
+   }
+
+  }
+   
+
+
+  </script>
+    <!-- <script>
         function scrollChat() {
   var chatContainer = document.querySelector('.chat-container');
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -210,6 +368,6 @@ text.addEventListener("keypress", function (e) {
          })
          
          
-    </script>
+    </script> -->
 </body>
 </html>
