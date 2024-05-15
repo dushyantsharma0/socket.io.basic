@@ -55,7 +55,7 @@ fetch('https://socket-io-basic.onrender.com/data',{
         button.onclick=function(){
             let ID = button.parentElement.children[1].id;
             localStorage.setItem('reciver_id', ID);
-            window.location.href='http://localhost:3000/index'
+            window.location.href='https://socket-io-basic.onrender.com/index'
         }
         div.appendChild(button)
         maindiv.appendChild(div);
