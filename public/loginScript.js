@@ -1,5 +1,5 @@
 if(localStorage.getItem('email')){
-    window.location.href='http://localhost:3000/dashboard'
+    window.location.href='https://socket-io-basic.onrender.com/dashboard'
 }
 
 
@@ -11,7 +11,7 @@ var button = document.getElementById("submit");
 
 button.addEventListener("click", function(e) {
    
-    fetch('https://socket-io-basic.onrender.com', {
+    fetch('https://socket-io-basic.onrender.com/login', {
         method: "POST",
         body: JSON.stringify({
             email: email.value,
