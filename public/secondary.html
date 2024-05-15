@@ -53,7 +53,7 @@ function scrollChat() {
     var text=document.getElementById("text");
  
  
-    fetch('http://localhost:3000/getchat',{
+    fetch('https://socket-io-basic.onrender.com/getchat',{
         method:'GET',
         headers:{
             'Content-Type':'application/json',

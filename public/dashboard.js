@@ -1,5 +1,5 @@
 if(!localStorage.getItem('email')){
-    window.location.href="http://localhost:3000/login";
+    window.location.href="https://socket-io-basic.onrender.com";
     
 }
 
@@ -10,7 +10,7 @@ const maindiv=document.createElement("div");
 
 
 
-fetch('http://localhost:3000/data',{
+fetch('https://socket-io-basic.onrender.com/data',{
     method:"GET",
   
     headers:{
