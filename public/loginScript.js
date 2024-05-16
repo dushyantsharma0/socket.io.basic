@@ -35,3 +35,9 @@ button.addEventListener("click", function(e) {
    
     e.preventDefault();
 });
+
+const goToRegister=document.getElementById("goToRegister");
+
+goToRegister.addEventListener('click',()=>{
+    window.location.href='https://socket-io-basic.onrender.com/register'
+})

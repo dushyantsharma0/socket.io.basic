@@ -7,6 +7,10 @@ const server=http.createServer(app)
 const mongoose=require('mongoose');
 const dataSchma=require('./models/chatmodel')
 mongoose.connect(process.env.MONGODB_URl)
+const cors=require('cors')
+
+ 
+
 
 const io=socket(server)
 const path=require('path')
@@ -21,7 +25,7 @@ app.use(express.urlencoded({extended:true}))
 const auth=require('./middleware/auth')
 const jwt=require('jsonwebtoken')
 
-
+ app.use(cors())
 // todo:token generate
 const generateAccessToken =async(user)=>{
     const token=jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn:'2h'})
